@@ -1,0 +1,7 @@
+_target_: lsr.datasets.prediction_dataset.PredictionDataset
+docs_path: 'irds:codec'
+doc_field: ['title', 'text']
+query_field: ['query']
+queries_path: 'irds:codec'
+qrels_path:  'irds:codec'
+num_documents: -1

@@ -1,0 +1,73 @@
+# @package _global_
+defaults:
+  - /dataset@eval_dataset: trec_robust04_fold1
+  - /dataset@test_dataset: trec_robust04
+  - override /dataset@train_dataset: robust04_inparsv2_monot53b
+  - override /loss: sparse_kl_loss 
+  - override /model: qmlp_dmlm_emlm 
+
+entity_embedding_model: 
+  _target_: lsr.models.entity_emb.BertEntityEmbedding
+  entity_emb_path: dyvo_data/knowledge_base/entity_embs_bert_agg.pt
+
+entity_candidate_retriever: 
+  _target_: lsr.entity.bert_candidates.BERTCandidate
+  query_ent_path: dyvo_data/robust04/queries_test_train_entities_rel.jsonl
+  doc_ent_path: dyvo_data/robust04/docs_entities.jsonl
+
+data_collator:
+  _target_: lsr.datasets.text_entity_collator.DynamicDataCollator
+  tokenizer: ${tokenizer}
+  q_max_length: ${query_max_length}
+  d_max_length: ${doc_max_length}
+  candidate_retriever: ${entity_candidate_retriever}
+  entity_dim: 768
+
+model:
+  query_encoder:
+    ent_emb_model: ${entity_embedding_model}
+    config:
+      _target_: lsr.models.mlp_emlm.TransformerMLPeMLMConfig
+      only_entity: False 
+      aspect_vector: False
+      sparse_aspect: Flase 
+      entity_weight: 0.05
+      entity_dim: 768
+  doc_encoder:
+    ent_emb_model: ${entity_embedding_model}
+    config:
+      _target_: lsr.models.mlm_emlm.TransformerMLMeMLMConfig
+      only_entity: False 
+      aspect_vector: False 
+      sparse_aspect: False
+      entity_weight: 0.05
+      entity_dim: 768
+  query_encoder_checkpoint: dyvo_data/dyvo_init/query_encoder/model.safetensors 
+  doc_encoder_checkpoint: dyvo_data/dyvo_init/doc_encoder/model.safetensors
+
+query_max_length: 50
+doc_max_length: 512
+eval_dataset:
+  num_documents: 100000
+training_arguments:
+  evaluation_strategy: 'steps'
+  eval_steps: 5000
+  per_device_eval_batch_size: 64
+  learning_rate: 5e-7
+  warmup_steps: 0
+  max_steps: 100000
+  save_steps: 5000
+  warmup_ratio: 0.1
+  dataloader_drop_last: False
+trainer: 
+  eval_dataset: ${eval_dataset}
+loss:
+  normalize: "std"
+  reg_ent: False 
+  q_regularizer:
+    _target_: lsr.losses.regularizer.L1
+    weight: 0.0
+  d_regularizer:
+    _target_: lsr.losses.regularizer.L1
+    T: 50000
+    weight: 0.00001

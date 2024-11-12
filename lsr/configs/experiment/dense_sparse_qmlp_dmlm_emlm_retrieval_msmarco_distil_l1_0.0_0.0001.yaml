@@ -1,0 +1,69 @@
+# @package _global_
+defaults:
+  - /dataset@eval_dataset: msmarco_dev
+  - /dataset@test_dataset: msmarco_test
+  - override /dataset@train_dataset: msmarco_iterable_triplet_distil
+  - override /loss: ent_retrieval_sparse_kl_loss
+  - override /model: qmlp_dmlm_emlm
+
+entity_candidate_retriever: 
+  _target_: lsr.entity.bert_candidates.BERTCandidate
+  query_ent_path: "../../dataset/entities/msmarco-passage/msmarco_queries_retrieval.jsonl"
+  doc_ent_path: "../../dataset/entities/msmarco-passage/msmarco_passages_retrieval.jsonl"
+  entity_dict: "data/entity_list.json"
+
+entity_embedding_model: 
+  _target_: lsr.models.entity_emb.BertEntityEmbedding
+  entity_emb_path: "data/entity_dpr_emb_lsr_cls.pt"
+
+data_collator:
+  _target_: lsr.datasets.text_entity_collator.DynamicDataCollator
+  tokenizer: ${tokenizer}
+  q_max_length: ${query_max_length}
+  d_max_length: ${doc_max_length}
+  candidate_retriever: ${entity_candidate_retriever}
+
+training_arguments:
+  evaluation_strategy: 'steps'
+  eval_steps: 100000
+  per_device_eval_batch_size: 64
+  metric_for_best_model: "RR@10"
+trainer: 
+  inverted_index: True 
+  eval_dataset: ${eval_dataset}
+model: 
+  query_encoder:
+    ent_emb_model: ${entity_embedding_model}
+    config:
+      _target_: lsr.models.mlp_emlm.TransformerMLPeMLMConfig
+      dense: True
+      entity_emb_path: data/entity_dpr_emb_lsr_cls.pt
+      only_entity: False 
+      entity_retrieval: True 
+      activation: "no"
+      entity_bias_term: True 
+      aspect_vector: False 
+      sparse_aspect: False
+  doc_encoder:
+    ent_emb_model: ${entity_embedding_model}
+    config:
+      _target_: lsr.models.mlm_emlm.TransformerMLMeMLMConfig
+      dense: True 
+      entity_emb_path: data/entity_dpr_emb_lsr_cls.pt
+      only_entity: False 
+      entity_retrieval: True 
+      activation: "no"
+      entity_bias_term: True 
+      aspect_vector: False 
+      sparse_aspect: False
+  query_encoder_checkpoint: outputs/dense_sparse_qmlp_dmlm_msmarco_distil_l1_0.0_0.0001/02-07-2024/model/query_encoder/model.safetensors 
+  doc_encoder_checkpoint: outputs/dense_sparse_qmlp_dmlm_msmarco_distil_l1_0.0_0.0001/02-07-2024/model/doc_encoder/model.safetensors
+loss:
+  normalize: 'softmax'
+  q_regularizer:
+    _target_: lsr.losses.regularizer.L1
+    weight: 0
+  d_regularizer:
+    _target_: lsr.losses.regularizer.L1
+    weight: 0.0001
+  

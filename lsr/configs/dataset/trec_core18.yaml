@@ -1,0 +1,7 @@
+_target_: lsr.datasets.prediction_dataset.PredictionDataset
+docs_path: 'irds:wapo/v2/trec-core-2018'
+doc_field: ['title', 'body']
+query_field: ['description']
+queries_path: 'irds:wapo/v2/trec-core-2018'
+qrels_path:  'irds:wapo/v2/trec-core-2018'
+num_documents: -1

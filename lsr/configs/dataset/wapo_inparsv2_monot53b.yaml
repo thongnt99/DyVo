@@ -1,0 +1,6 @@
+_target_: lsr.datasets.TripletIDDistilDataset
+collection_path: 'irds:wapo/v2/trec-core-2018'
+doc_fields: ['title', 'body']
+queries_path: 'dyvo_data/wapo/wapo_inparsev2_topics.tsv'
+qrels_path:  'dyvo_data/wapo/wapo_inparsev2_qrels.json'
+ce_score_dict: 'dyvo_data/wapo/wapo_monot5_3b_scores.json'

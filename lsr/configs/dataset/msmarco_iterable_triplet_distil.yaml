@@ -1,0 +1,4 @@
+_target_: lsr.datasets.iterable_triplets.iterable_train_triplets
+triplet_part: 'data/msmarco_triplets.tsv'
+collection_path: 'irds:msmarco-passage'
+queries_path: 'irds:msmarco-passage/train/judged'

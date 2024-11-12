@@ -1,0 +1,7 @@
+_target_: lsr.datasets.prediction_dataset.PredictionDataset
+docs_path: 'irds:disks45/nocr/trec-robust-2004'
+doc_field: ['title', 'body']
+query_field: ['description']
+queries_path: 'irds:disks45/nocr/trec-robust-2004'
+qrels_path:  'irds:disks45/nocr/trec-robust-2004'
+num_documents: -1

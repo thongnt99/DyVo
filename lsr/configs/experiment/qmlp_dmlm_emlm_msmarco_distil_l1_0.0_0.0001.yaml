@@ -1,0 +1,27 @@
+# @package _global_
+defaults:
+  - /dataset@eval_dataset: msmarco_dev
+  - /dataset@test_dataset: trec_robust04
+  - override /dataset@train_dataset: msmarco_iterable_triplet_distil
+  - override /loss: sparse_kl_loss
+  - override /model: qmlp_dmlm_emlm
+
+data_collator:
+  _target_: lsr.datasets.text_entity_collator.DynamicDataCollator
+  tokenizer: ${tokenizer}
+  q_max_length: ${query_max_length}
+  d_max_length: ${doc_max_length}
+training_arguments:
+  evaluation_strategy: 'steps'
+  eval_steps: 100000
+  per_device_eval_batch_size: 64
+  metric_for_best_model: "RR@10"
+trainer: 
+  eval_dataset: ${eval_dataset}
+loss:
+  q_regularizer:
+    _target_: lsr.losses.regularizer.L1
+    weight: 0
+  d_regularizer:
+    _target_: lsr.losses.regularizer.L1
+    weight: 0.0001

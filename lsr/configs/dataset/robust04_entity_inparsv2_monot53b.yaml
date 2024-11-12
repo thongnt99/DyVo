@@ -1,0 +1,9 @@
+_target_: lsr.datasets.TripletIDDistilDataset
+collection_path: 'data/robust04/docs.tsv'
+#data/msmarco/full_collection/raw.tsv
+queries_path: 'data/robust04/inparsv2/entity_topics-robust04.tsv'
+#data/msmarco/train_queries/queries/raw.tsv
+qrels_path:  'data/robust04/inparsv2/entity_robust04_qrels.json'
+#data/msmarco/train_queries/qrels.json
+ce_score_dict: 'data/robust04/inparsv2/entity_monot5_3b_scores.json'
+#data/msmarco/hard_negatives_scores/cross-encoder-ms-marco-MiniLM-L-6-v2-scores.pkl.gz

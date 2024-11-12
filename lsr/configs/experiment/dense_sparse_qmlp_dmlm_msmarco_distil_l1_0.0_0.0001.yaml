@@ -1,0 +1,33 @@
+# @package _global_
+defaults:
+  - /dataset@eval_dataset: msmarco_dev
+  - /dataset@test_dataset: msmarco_test
+  - override /dataset@train_dataset: msmarco_iterable_triplet_distil
+  - override /loss: dense_sparse_kl_loss
+  - override /model: qmlp_dmlm
+training_arguments:
+  evaluation_strategy: 'steps'
+  eval_steps: 100000
+  per_device_eval_batch_size: 64
+  metric_for_best_model: "RR@10"
+trainer: 
+  inverted_index: True 
+  eval_dataset: ${eval_dataset}
+model: 
+  query_encoder:
+    config:
+      _target_: lsr.models.TransformerMLPConfig
+      dense: True
+  doc_encoder:
+    config:
+      _target_: lsr.models.mlm.TransformerMLMConfig
+      dense: True 
+loss:
+  normalize: 'softmax'
+  q_regularizer:
+    _target_: lsr.losses.regularizer.L1
+    weight: 0
+  d_regularizer:
+    _target_: lsr.losses.regularizer.L1
+    weight: 0.0001
+  

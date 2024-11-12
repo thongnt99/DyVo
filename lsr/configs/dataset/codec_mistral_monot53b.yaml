@@ -1,0 +1,6 @@
+_target_: lsr.datasets.TripletIDDistilDataset
+collection_path: 'irds:codec'
+doc_fields: ['title', 'text']
+queries_path: 'dyvo_data/codec/codec_mistral_topics.tsv'
+qrels_path:  'dyvo_data/codec/codec_mistral_qrels.json'
+ce_score_dict: 'dyvo_data/codec/codec_monot5_3b_scores.json'

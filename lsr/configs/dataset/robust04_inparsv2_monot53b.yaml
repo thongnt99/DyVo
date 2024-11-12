@@ -1,0 +1,7 @@
+_target_: lsr.datasets.TripletIDDistilDataset
+# collection_path: 'dyvo_data/robust04/docs.tsv' # need to convert robust04 to format doc_id \tab title + ' ' + body
+collection_path: 'irds:disks45/nocr/trec-robust-2004'
+doc_fields: ['title', 'body']
+queries_path: 'dyvo_data/robust04/robust04_inparsv2_topics.tsv'
+qrels_path:  'dyvo_data/robust04/robust04_inparsv2_qrels.json'
+ce_score_dict: 'dyvo_data/robust04/robust04_monot5_3b_scores.json'

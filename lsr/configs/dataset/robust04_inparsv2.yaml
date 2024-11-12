@@ -1,0 +1,2 @@
+_target_: lsr.datasets.triplet_dataset.TripletTextDataset
+data_path: data/robust04/inparsv2/triples_train_v2.tsv

@@ -1,0 +1,36 @@
+# @package _global_
+defaults:
+  - /dataset@eval_dataset: trec_robust04_fold1
+  - /dataset@test_dataset: trec_robust04
+  - override /dataset@train_dataset: robust04_inparsv2_monot53b
+  - override /loss: sparse_kl_loss 
+  - override /model: qmlp_dmlm  
+model:
+  query_encoder_checkpoint: dyvo_data/dyvo_init/query_encoder/pytorch_model.bin 
+  doc_encoder_checkpoint: dyvo_data/dyvo_init/doc_encoder/pytorch_model.bin 
+  
+query_max_length: 50
+doc_max_length: 512
+eval_dataset:
+  num_documents: 100000
+training_arguments:
+  evaluation_strategy: 'steps'
+  eval_steps: 5000
+  per_device_eval_batch_size: 64
+  learning_rate: 5e-7
+  warmup_steps: 0
+  max_steps: 100000
+  save_steps: 5000
+  warmup_ratio: 0.1
+  dataloader_drop_last: False
+trainer: 
+  eval_dataset: ${eval_dataset}
+loss:
+  normalize: "std"
+  q_regularizer:
+    _target_: lsr.losses.regularizer.L1
+    weight: 0.0
+  d_regularizer:
+    _target_: lsr.losses.regularizer.L1
+    T: 50000
+    weight: 0.00001
