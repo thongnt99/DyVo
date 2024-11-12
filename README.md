@@ -1,3 +1,3 @@
 # DyVo
 
-Codebase will be released soon. 
+Codebase for the paper "DyVo: Dynamic Vocabularies for Learned Sparse Retrieval with Entities"
