@@ -8,3 +8,4 @@ transformers>=4.6.0,<5.0.0
 hydra-core
 ir_datasets 
 datasets
+ir-measures
