@@ -55,8 +55,6 @@ huggingface-cli download lsr42/dyvo_data
   huggingface-cli login
   ```
 - The downloaded files will be cached locally. Refer to the Hugging Face CLI documentation for cache settings if needed.
-- Recommended Python version: 3.7 or later.
-
 ---
 
 ### 3. Train and Evaluate a Model
