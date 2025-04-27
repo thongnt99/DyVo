@@ -37,7 +37,7 @@ mkdir dyvo_data
 cd dyvo_data
 ```
 
-#### 2.3 Download Data from Hugging Face
+#### 2.3 Download Entity Data from Hugging Face
 
 Make sure the Hugging Face CLI is installed:
 ```bash
@@ -56,6 +56,21 @@ huggingface-cli download lsr42/dyvo_data
   ```
 - The downloaded files will be cached locally. Refer to the Hugging Face CLI documentation for cache settings if needed.
 ---
+
+#### 2.4 Query and Document Collections (Wapo, Codec, Robust04)
+
+Queries and documents are accessible via [ir-datasets](https://ir-datasets.com/).  
+Please refer to the website for instructions on how to download them.
+
+| Dataset  | `ir_datasets` Key |
+|----------|-------------------|
+| Wapo     | [wapo/v2/trec-core-2018](https://ir-datasets.com/wapo.html#wapo/v2/trec-core-2018) |
+| Robust04 | [disks45/nocr/trec-robust-2004](https://ir-datasets.com/disks45.html#disks45/nocr/trec-robust-2004) |
+| Codec    | [codec](https://ir-datasets.com/codec.html#codec) |
+
+
+
+
 
 ### 3. Train and Evaluate a Model
 
