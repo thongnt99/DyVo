@@ -3,8 +3,6 @@ from .mlm import (
     TransformerMLMSparseEncoder,
     TransformerMLMConfig,
 )
-from .mlp_entity import MLPEntity, MLPEntityConfig
-from .mlm_entity import MLMEntity
 from .mlp_ebin import TransformerMLPeBINConfig, TransformerMLPeBINSparseEncoder
 from .mlm_emlm import TransformerMLMeMLMConfig, TransformerMLMeMLMSparseEncoder
 from .mlp_emlm import TransformerMLPeMLMSparseEncoder, TransformerMLPeMLMConfig
